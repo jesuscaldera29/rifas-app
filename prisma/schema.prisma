@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Raffle {
+  id              Int      @id @default(autoincrement())
+  name            String
+  totalNumbers    Int      @default(100)
+  pricePerNumber  Float    @default(5000)
+  status          String   @default("ACTIVE") // ACTIVE, FINISHED
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  winners         String?  // The internal winning numbers (comma separated)
+  
+  // New Lottery fields
+  lotteryName     String?
+  launchDate      String?  // Fecha de lanzamiento
+  drawDate        String?  // Can be string like "30 de Junio" or DateTime
+  prizes          String?
+  digits          Int      @default(2) // 2 (00-99), 3 (000-999), 4 (0000-9999)
+  winningNumber   String?  // The official lottery result (e.g., 4598)
+  
+  numbers         Number[]
+}
+
+model Number {
+  id              Int      @id @default(autoincrement())
+  value           Int      
+  raffleId        Int
+  status          String   @default("AVAILABLE") // AVAILABLE, PENDING, PAID
+  participantId   Int?
+  
+  raffle          Raffle   @relation(fields: [raffleId], references: [id])
+  participant     Participant? @relation(fields: [participantId], references: [id])
+
+  @@unique([raffleId, value])
+}
+
+model Participant {
+  id              Int      @id @default(autoincrement())
+  name            String
+  phone           String
+  createdAt       DateTime @default(now())
+  
+  numbers         Number[]
+}

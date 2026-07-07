@@ -1,0 +1,276 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  padding-bottom: 100px; /* Space for bottom bar */
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 24px;
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff, #9CA3AF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+
+.lotteryInfo {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.lotteryBadge {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.prizeBadge {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.searchBar {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 20px;
+  border-radius: var(--radius-full);
+  background: var(--surface-color);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1.1rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.searchInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+  gap: 12px;
+}
+
+.numberBtn {
+  background-color: var(--surface-color);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.numberBtn.available { cursor: pointer; }
+.numberBtn.available:hover {
+  transform: scale(1.05);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+.numberBtn.selected {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+.numberBtn.pending {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.numberBtn.paid {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--accent);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.numberBtn.winner {
+  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  color: white;
+  animation: pulse 2s infinite;
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  z-index: 10;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1.1); }
+  50% { transform: scale(1.2); box-shadow: 0 0 30px rgba(245, 158, 11, 0.8); }
+  100% { transform: scale(1.1); }
+}
+
+/* Rappi Style Cart Bottom Bar */
+.bottomCart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface-color);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+}
+
+.cartContainer {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cartInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cartTotal {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.cartItems {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.checkoutBtn {
+  background-color: var(--primary);
+  color: white;
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Modal Checkout */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: var(--surface-color);
+  width: 100%;
+  max-width: 500px;
+  border-radius: 24px 24px 0 0;
+  padding: 32px;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modalHeader h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.closeBtn {
+  background: rgba(255,255,255,0.1);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+}
+
+.formGroup { margin-bottom: 16px; }
+.formGroup label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+.formGroup input, .formGroup select {
+  width: 100%;
+  padding: 14px;
+  background: var(--bg-color);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  color: white;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #25D366;
+  color: white;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.submitBtn:hover { background: #128C7E; }
+
+.statusLegend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.legendItem { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+.legendDot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-available { background-color: var(--surface-hover); border: 1px solid rgba(255,255,255,0.1); }
+.dot-pending { background-color: var(--warning); }
+.dot-paid { background-color: var(--accent); }
