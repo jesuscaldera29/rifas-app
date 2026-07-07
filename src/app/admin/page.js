@@ -188,16 +188,16 @@ export default function AdminDashboard() {
                       {p.numbers.map(n => (
                         <div key={n.id} style={{display: 'flex', alignItems: 'center', gap: 12}}>
                           <span className={`badge badge-${n.status.toLowerCase()}`}>
-                            #{String(n.value).padStart(padLength, '0')} - {n.status === 'PAID' ? 'VALIDADO' : (n.status === 'PENDING' ? 'REVISANDO' : n.status)}
+                            #{String(n.value).padStart(padLength, '0')} - {n.status === 'PAID' ? 'PAGADO' : (n.status === 'PENDING' ? 'PENDIENTE' : n.status)}
                           </span>
                           <select 
                             className={styles.actionSelect}
                             value={n.status}
                             onChange={(e) => updateStatus(n.id, e.target.value)}
                           >
-                            <option value="PENDING">Revisando</option>
-                            <option value="PAID">Validado</option>
-                            <option value="AVAILABLE">Liberar</option>
+                            <option value="PENDING">Pendiente de Pago</option>
+                            <option value="PAID">Pagado (Confirmado)</option>
+                            <option value="AVAILABLE">Cancelar / Liberar</option>
                           </select>
                         </div>
                       ))}

@@ -179,7 +179,7 @@ export default function Home() {
 
       <div className={styles.statusLegend}>
         <div className={styles.legendItem}><div className={`${styles.legendDot} ${styles['dot-available']}`}></div> Disponible</div>
-        <div className={styles.legendItem}><div className={`${styles.legendDot} ${styles['dot-pending']}`}></div> Revisando</div>
+        <div className={styles.legendItem}><div className={`${styles.legendDot} ${styles['dot-pending']}`}></div> Pendiente</div>
         <div className={styles.legendItem}><div className={`${styles.legendDot} ${styles['dot-paid']}`}></div> Pagado</div>
       </div>
 
