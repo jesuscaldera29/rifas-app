@@ -25,6 +25,14 @@ export default function AdminDashboard() {
     try {
       const res = await fetch('/api/raffle');
       const data = await res.json();
+      
+      if (!res.ok || data.error || !data.numbers) {
+        console.error('API error:', data.error || 'Invalid response');
+        setRaffle(null);
+        setLoading(false);
+        return;
+      }
+      
       setRaffle(data);
       if (data) {
         setSettingsForm({
@@ -40,11 +48,14 @@ export default function AdminDashboard() {
       if (data && data.id) {
         const pRes = await fetch(`/api/participants?raffleId=${data.id}`);
         const pData = await pRes.json();
-        setParticipants(pData);
+        if (Array.isArray(pData)) {
+          setParticipants(pData);
+        }
       }
       setLoading(false);
     } catch (error) {
       console.error(error);
+      setRaffle(null);
       setLoading(false);
     }
   };
