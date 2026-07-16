@@ -13,7 +13,7 @@ export default function AdminDashboard() {
   
   const [lotteryResult, setLotteryResult] = useState('');
   const [settingsForm, setSettingsForm] = useState({
-    name: '', lotteryName: '', drawDate: '', launchDate: '', prizes: '', digits: 2
+    name: '', lotteryName: '', drawDate: '', launchDate: '', prizes: '', digits: 2, pricePerNumber: 5000, totalNumbers: 100, isCustom: false
   });
   const [selectedTicket, setSelectedTicket] = useState(null);
 
@@ -41,7 +41,10 @@ export default function AdminDashboard() {
           drawDate: data.drawDate || '',
           launchDate: data.launchDate || '',
           prizes: data.prizes || '',
-          digits: data.digits || 2
+          digits: data.digits || 2,
+          pricePerNumber: data.pricePerNumber || 5000,
+          totalNumbers: data.totalNumbers || 100,
+          isCustom: data.totalNumbers !== Math.pow(10, data.digits || 2)
         });
       }
 
@@ -110,7 +113,7 @@ export default function AdminDashboard() {
   };
 
   const handleGenerateNumbers = async () => {
-    if (!confirm(`⚠️ ¡ADVERTENCIA! Vas a borrar TODOS los números actuales y sus reservaciones. Se generarán ${Math.pow(10, settingsForm.digits)} números nuevos. ¿Estás absolutamente seguro?`)) return;
+    if (!confirm(`⚠️ ¡ADVERTENCIA! Vas a borrar TODOS los números actuales y sus reservaciones. Se generarán ${settingsForm.totalNumbers} números nuevos. ¿Estás absolutamente seguro?`)) return;
     
     try {
       const res = await fetch('/api/raffle', {
@@ -258,18 +261,58 @@ export default function AdminDashboard() {
             </div>
             <div className={styles.formRow}>
               <div className={styles.formGroup}>
+                <label>Precio por Número ($)</label>
+                <input required type="number" value={settingsForm.pricePerNumber} onChange={e => setSettingsForm({...settingsForm, pricePerNumber: parseInt(e.target.value) || 0})} />
+              </div>
+            </div>
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
                 <label>Fecha del Sorteo</label>
                 <input required type="text" value={settingsForm.drawDate} onChange={e => setSettingsForm({...settingsForm, drawDate: e.target.value})} />
               </div>
               <div className={styles.formGroup}>
                 <label>Cantidad de Cifras (Números)</label>
-                <select value={settingsForm.digits} onChange={e => setSettingsForm({...settingsForm, digits: parseInt(e.target.value)})}>
+                <select 
+                  value={settingsForm.isCustom ? 'custom' : settingsForm.digits} 
+                  onChange={e => {
+                    const val = e.target.value;
+                    if (val === 'custom') {
+                      setSettingsForm({...settingsForm, isCustom: true});
+                    } else {
+                      const digits = parseInt(val);
+                      setSettingsForm({...settingsForm, isCustom: false, digits, totalNumbers: Math.pow(10, digits)});
+                    }
+                  }}
+                >
                   <option value={2}>2 Cifras (00-99) - 100 Números</option>
                   <option value={3}>3 Cifras (000-999) - 1000 Números</option>
                   <option value={4}>4 Cifras (0000-9999) - 10000 Números</option>
+                  <option value="custom">Cantidad Personalizada...</option>
                 </select>
               </div>
             </div>
+            
+            {settingsForm.isCustom && (
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label>Cantidad Exacta de Números</label>
+                  <input 
+                    required 
+                    type="number" 
+                    min="1"
+                    value={settingsForm.totalNumbers} 
+                    onChange={e => {
+                      const total = parseInt(e.target.value) || 1;
+                      const digits = String(total - 1).length;
+                      setSettingsForm({...settingsForm, totalNumbers: total, digits});
+                    }} 
+                  />
+                  <small style={{color: 'var(--text-secondary)', marginTop: 4, display: 'block'}}>
+                    Generará boletos desde el 000 hasta el {settingsForm.totalNumbers - 1}
+                  </small>
+                </div>
+              </div>
+            )}
             
             <div style={{display: 'flex', gap: 16, marginTop: 24}}>
               <button type="submit" className="btn-primary" style={{flex: 1}}>

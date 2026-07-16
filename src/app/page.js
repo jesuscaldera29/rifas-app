@@ -9,6 +9,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState('');
+  const [randomCount, setRandomCount] = useState(1);
   const [showCheckout, setShowCheckout] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -44,6 +45,20 @@ export default function Home() {
       if (exists) return prev.filter(item => item.id !== num.id);
       else return [...prev, num];
     });
+  };
+
+  const handleRandomPick = () => {
+    const availableNumbers = raffle.numbers.filter(n => n.status === 'AVAILABLE' && !cart.find(c => c.id === n.id));
+    if (availableNumbers.length < randomCount) {
+      alert(`Solo hay ${availableNumbers.length} números disponibles.`);
+      return;
+    }
+    
+    // Shuffle and pick
+    const shuffled = [...availableNumbers].sort(() => 0.5 - Math.random());
+    const picked = shuffled.slice(0, randomCount);
+    
+    setCart(prev => [...prev, ...picked]);
   };
 
   const handleCheckout = async (e) => {
@@ -165,15 +180,39 @@ export default function Home() {
       )}
 
       <div className={styles.searchBar}>
-        <div style={{position: 'relative', width: '100%', maxWidth: '400px'}}>
-          <Search size={20} style={{position: 'absolute', left: 16, top: 14, color: 'var(--text-secondary)'}}/>
-          <input 
-            type="number" 
-            placeholder="Buscar tu número de la suerte..." 
-            className={styles.searchInput}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div style={{display: 'flex', gap: 12, flexWrap: 'wrap', width: '100%', maxWidth: '800px', justifyContent: 'center'}}>
+          <div style={{position: 'relative', flex: '1 1 300px', minWidth: '250px'}}>
+            <Search size={20} style={{position: 'absolute', left: 16, top: 14, color: 'var(--text-secondary)'}}/>
+            <input 
+              type="number" 
+              placeholder="Buscar tu número de la suerte..." 
+              className={styles.searchInput}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{width: '100%'}}
+            />
+          </div>
+          <div style={{display: 'flex', gap: 8, alignItems: 'center'}}>
+            <select 
+              className={styles.searchInput} 
+              style={{width: 'auto', paddingLeft: 16, cursor: 'pointer'}}
+              value={randomCount}
+              onChange={(e) => setRandomCount(Number(e.target.value))}
+            >
+              <option value={1}>1 al azar</option>
+              <option value={2}>2 al azar</option>
+              <option value={3}>3 al azar</option>
+              <option value={5}>5 al azar</option>
+              <option value={10}>10 al azar</option>
+            </select>
+            <button 
+              className="btn-primary" 
+              onClick={handleRandomPick}
+              style={{padding: '12px 20px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8}}
+            >
+              <Gift size={18}/> ¡Sorpréndeme!
+            </button>
+          </div>
         </div>
       </div>
 

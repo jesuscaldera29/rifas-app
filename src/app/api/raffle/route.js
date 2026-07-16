@@ -64,6 +64,7 @@ export async function PATCH(req) {
         drawDate: drawDate !== undefined ? drawDate : currentRaffle.drawDate,
         prizes: prizes !== undefined ? prizes : currentRaffle.prizes,
         digits: digits !== undefined ? Number(digits) : currentRaffle.digits,
+        totalNumbers: totalNumbers !== undefined ? Number(totalNumbers) : currentRaffle.totalNumbers,
         pricePerNumber: pricePerNumber || currentRaffle.pricePerNumber,
       }
     });
@@ -123,8 +124,8 @@ export async function POST(req) {
       // Borrar todos los números actuales
       await prisma.number.deleteMany({ where: { raffleId } });
 
-      // Generar los nuevos números basados en la cantidad de dígitos (2=100, 3=1000, 4=10000)
-      const count = Math.pow(10, raffle.digits);
+      // Generar los nuevos números basados en el totalNumbers configurado
+      const count = raffle.totalNumbers;
 
       // Prisma SQLite bulk insert limit can be hit for 10000 rows, so we can use createMany, 
       // but in SQLite sometimes the chunk limit is 999. Let's do it in chunks.
